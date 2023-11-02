@@ -12,3 +12,61 @@ Content-Type: application/json
 GET http://localhost:3000/cliente/obtener
 ### Borrar cliente por id
 DELETE  http://localhost:3000/cliente/borrar/65430bf2d47688c65e965a43
+
+### Crear Vehiculo
+POST http://localhost:3000/vehiculo/crear
+Content-Type: application/json
+
+{
+    "Modelo":"Ford Explorer",
+    "Color":"Verde",
+    "Year":2003,
+    "Precio":20000,
+    "Estado":"Usado"
+}
+
+### Obtener todos los vehiculo
+GET http://localhost:3000/vehiculo/obtener
+
+### Crear Vendedor
+POST http://localhost:3000/vendedor/crear
+Content-Type: application/json
+
+{
+    "Nombre":"Michel",
+    "Apellido":"Miau",
+    "Turno":"Matutino",
+    "Historial":[]
+
+}
+### Obtener todos los vendedores
+GET http://localhost:3000/vendedor/obtener
+
+### Obtener vendedor especifico con todas sus ventas (historial)
+GET http://localhost:3000/vendedor/obtener/65432689895d9ae38dfee809
+
+### CREAR VENTA
+POST http://localhost:3000/venta/crear
+Content-Type: application/json
+
+{
+    "Carro_vendido":"6543216917003ab204db51e2",
+    "Vendedor":"65432689895d9ae38dfee809",
+    "Cliente":"6543275d6ecdf85c5b18b150",
+    "Enganche":200
+
+}
+### Obtener todas las ventas
+GET http://localhost:3000/venta/obtener
+
+
+### Obtener todas las ventas, pero con los campos completos no solo el id
+GET http://localhost:3000/venta/obtenercompleto
+
+### Agregar una nueva venta al historial del vendedor especifico usando su id
+POST http://localhost:3000/vendedor/agregarventa/65432689895d9ae38dfee809
+Content-Type: application/json
+
+{
+"historial":"654327696ecdf85c5b18b152"
+}

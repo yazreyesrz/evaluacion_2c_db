@@ -15,7 +15,7 @@ const VentaSchema = mongoose.Schema(
       required: true,
       ref: "Vendedor",
     },
-    Cliente_id: {
+    Cliente: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Cliente",

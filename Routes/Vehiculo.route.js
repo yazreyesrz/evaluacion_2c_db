@@ -1,26 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const VentaSchema = require("../models/Ventas.model");
+const VehiculoSchema = require("../models/Vehiculo.model");
 
 router.get("/obtener", (req, res, next) => {
-  VentaSchema.find()
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }));
-});
-
-router.get("/obtenercompleto", (req, res, next) => {
-  VentaSchema.find()
-    .populate("Carro_vendido") // Reemplaza la referencia con los datos de Vehiculo
-    .populate("Vendedor") // Reemplaza la referencia con los datos de Vendedor
-    .populate("Cliente")
+  VehiculoSchema.find()
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }));
 });
 
 router.post("/crear", async (req, res, next) => {
   try {
-    const venta = new VentaSchema(req.body);
-    const result = await venta.save();
+    const Vehiculo = new VehiculoSchema(req.body);
+    const result = await Vehiculo.save();
     res.send(result);
   } catch (error) {
     console.log(error.message);
@@ -29,19 +20,23 @@ router.post("/crear", async (req, res, next) => {
 
 router.get("/obtener/:id", (req, res, next) => {
   const { id } = req.params;
-  VentaSchema.findById(id)
+  VehiculoSchema.findById(id)
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }));
 });
 
 router.patch("/actualizar/:id", (req, res, next) => {
   const { id } = req.params;
-  const { Enganche } = req.body;
-  VentaSchema.updateOne(
+  const { Modelo, color, year, precio, estado } = req.body;
+  VehiculoSchema.updateOne(
     { _id: id },
     {
       $set: {
-        Enganche,
+        Modelo,
+        color,
+        year,
+        precio,
+        estado,
       },
     }
   )
@@ -51,7 +46,7 @@ router.patch("/actualizar/:id", (req, res, next) => {
 
 router.delete("/borrar/:id", (req, res, next) => {
   const { id } = req.params;
-  VentaSchema.deleteOne({ _id: id })
+  VehiculoSchema.deleteOne({ _id: id })
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }));
 });

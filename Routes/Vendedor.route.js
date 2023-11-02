@@ -1,11 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const ClienteSchema = require("../models/Cliente.model");
+const VendedorSchema = require("../models/Vendedor.model");
 
 router.get("/obtener", (req, res, next) => {
-  ClienteSchema.find()
+  VendedorSchema.find()
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }));
+});
+
+router.post("/crear", async (req, res, next) => {
+  try {
+    const Vendedor = new VendedorSchema(req.body);
+    const result = await Vendedor.save();
+    res.send(result);
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 router.post("/agregarventa/:id", async (req, res, next) => {
@@ -13,7 +23,7 @@ router.post("/agregarventa/:id", async (req, res, next) => {
   const historial = req.body.historial;
 
   try {
-    const vendedor = await ClienteSchema.findById(id);
+    const vendedor = await VendedorSchema.findById(id);
 
     if (!vendedor) {
       return res.status(404).json({ message: "Vendedor no encontrado" });
@@ -34,19 +44,19 @@ router.post("/agregarventa/:id", async (req, res, next) => {
   }
 });
 
-router.post("/crear", async (req, res, next) => {
-  try {
-    const cliente = new ClienteSchema(req.body);
-    const result = await cliente.save();
-    res.send(result);
-  } catch (error) {
-    console.log(error.message);
-  }
-});
-
 router.get("/obtener/:id", (req, res, next) => {
   const { id } = req.params;
-  ClienteSchema.findById(id)
+
+  VendedorSchema.aggregate([
+    {
+      $lookup: {
+        from: "ventas",
+        localField: "Historial",
+        foreignField: "_id",
+        as: "HistorialDetalles",
+      },
+    },
+  ])
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }));
 });
@@ -54,7 +64,7 @@ router.get("/obtener/:id", (req, res, next) => {
 router.patch("/actualizar/:id", (req, res, next) => {
   const { id } = req.params;
   const { Nombre, Apellido, Telefono } = req.body;
-  ClienteSchema.updateOne(
+  VendedorSchema.updateOne(
     { _id: id },
     {
       $set: {
@@ -70,7 +80,7 @@ router.patch("/actualizar/:id", (req, res, next) => {
 
 router.delete("/borrar/:id", (req, res, next) => {
   const { id } = req.params;
-  ClienteSchema.deleteOne({ _id: id })
+  VendedorSchema.deleteOne({ _id: id })
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }));
 });
