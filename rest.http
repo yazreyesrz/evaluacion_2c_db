@@ -1,0 +1,14 @@
+### Crear cliente
+POST http://localhost:3000/cliente/crear
+Content-Type: application/json
+
+{
+    "Nombre":"Eddie",
+    "Apellido":"Toledo",
+    "Telefono":9681034332
+}
+
+### Obtener todos los clientes
+GET http://localhost:3000/cliente/obtener
+### Borrar cliente por id
+DELETE  http://localhost:3000/cliente/borrar/65430bf2d47688c65e965a43
